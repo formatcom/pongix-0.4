@@ -19,6 +19,7 @@
 #ifndef _CURSOR_H
 #define _CURSOR_H
 
+#include "mundo.h"
 #include "util.h"
 
 typedef struct cursor
@@ -28,12 +29,15 @@ typedef struct cursor
 	int y_final;
 	SDL_Surface * ima;
 	int opcion;
+	int block_move;
 } Cursor;
 
 
 Cursor * cursor_iniciar (void);
+
+void cursor_imprimir (Cursor * data, struct mundo * mundo);
 void cursor_reiniciar (Cursor * data);
-void cursor_actualizar (Cursor * data, Uint8 * teclas);
+void cursor_actualizar (Cursor * data, int move);
 void cursor_terminar (Cursor * data);
 
 #endif

@@ -1,0 +1,38 @@
+# _____     ___ ____     ___ ____
+#  ____|   |    ____|   |        | |____|
+# |     ___|   |____ ___|    ____| |    \    PS2DEV Open Source Project.
+#-----------------------------------------------------------------------
+# Copyright 2001-2004, ps2dev - http://www.ps2dev.org
+# Licenced under Academic Free License version 2.0
+# Review ps2sdk README & LICENSE files for further details.
+
+EE_BIN = pongix.elf
+EE_OBJS = cursor.o dirty.o fuente.o marcador.o creditos.o juego.o \
+	  menu.o mundo.o paleta.o pelota.o pongix.o util.o control.o \
+	  fondo_juego_jpg.o fuente_bmp.o paleta_bmp.o pelota_bmp.o
+EE_INCS += -I$(PS2SDK)/ports/include
+EE_LIBS = -lm -L$(PS2SDK)/ports/lib -lSDL_image -lsdl
+
+
+all: $(EE_BIN)
+
+fondo_juego_jpg.s:
+	bin2s ../data/fondo_juego.jpg $@ fondo_juego_jpg
+
+fuente_bmp.s:
+	bin2s ../data/fuente.bmp $@ fuente_bmp
+
+paleta_bmp.s:
+	bin2s ../data/paleta.bmp $@ paleta_bmp
+
+pelota_bmp.s:
+	bin2s ../data/pelota.bmp $@ pelota_bmp
+
+%.o : %.s
+	$(EE_AS) $(EE_ASFLAGS) $(EE_ASM_DIR)$< -o $@
+
+clean:
+	rm -f  $(EE_BIN) $(EE_OBJS) *.s
+
+include $(PS2SDK)/samples/Makefile.pref
+include $(PS2SDK)/samples/Makefile.eeglobal

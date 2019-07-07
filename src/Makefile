@@ -1,7 +1,7 @@
-TARGET=pongix.exe
+TARGET=pongix
 
-OBJS = cursor.o dirty.o fuente.o marcador.o creditos.o juego.o \
-	  menu.o mundo.o paleta.o pelota.o pongix.o util.o control.o
+SRCS = $(wildcard *.c)
+OBJS = $(SRCS:.c=.o)
 
 LDFLAGS = -lm -lSDL_net -lSDL_image -lSDL
 

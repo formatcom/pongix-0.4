@@ -1,0 +1,8 @@
+all: build
+
+build:
+	make -f Makefile.ps2 -C src
+	mv src/pongix.elf .
+clean:
+	rm -f pongix pongix.elf pongix.exe
+	make -C src clean

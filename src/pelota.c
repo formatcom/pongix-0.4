@@ -40,16 +40,15 @@ Pelota * pelota_iniciar (struct juego * juego)
 	pelota->direccion_inicial = 1;
 	pelota->juego = juego;
 
-	
 	pelota->ima = cargar_imagen ("pelota.bmp");
 
-	if (pelota->ima == NULL ) 
+	if (pelota->ima == NULL )
 	{
 		printf("Error : %s\n", SDL_GetError());
 		return NULL;
-		
+
 	}
-	
+
 	return pelota;
 }
 
@@ -57,7 +56,7 @@ void pelota_imprimir ( Pelota * data, struct mundo * mundo)
 {
 	SDL_Rect rect = { data->x - data->ima->w / 2, \
 		data->y - data->ima->h / 2, 0, 0 };
-	
+
 	SDL_BlitSurface ( data->ima, NULL, mundo->screen, &rect);
 	dirty_agregar (mundo->dirty, rect);
 }
@@ -97,12 +96,12 @@ void pelota_actualizar (Pelota * data, Paleta * paleta1, Paleta * paleta2, \
 void pelota_estado_iniciando (Pelota * data)
 {
 	static float t = 0;
-	
+
 	data->y = 260 + sin (t += 0.1) * data->dy;
 	data->x = 320 + cos (t) * 20;
 
 	data->dy --;
-	
+
 	if (data->dy < 0)
 	{
 		data->dy = 0.01;
@@ -117,9 +116,9 @@ void pelota_estado_normal (Pelota * data, Paleta * paleta1, Paleta * paleta2, \
 	int a;
 	int b;
 	int l;
-	int distancia;
+	int distancia = 0;
 
-	/* limites laterales */	
+	/* limites laterales */
 	if (data->x > LIMITE_DERECHO)
 	{
 		marcador_sumar (marcador, 1);
@@ -139,14 +138,14 @@ void pelota_estado_normal (Pelota * data, Paleta * paleta1, Paleta * paleta2, \
 
 	if ((data->y - 10) < 40)
 		data->dy *= -1;
-	
 
-	
+
+
 	data->x += data->dx;
 	data->y += data->dy;
 
 	#define cuadrado(X) (X*X)
-	
+
 	/* colisiones hacia la izquierda */
 	if (data->dx < 0)
 	{
@@ -159,12 +158,12 @@ void pelota_estado_normal (Pelota * data, Paleta * paleta1, Paleta * paleta2, \
 
 		if (data->y > b)
 			distancia = dist ((data->y - b),(data->x - paleta1->x));
-	
+
 		/* colision en las esquinas redondas de la paleta */
 		if ((data->y > a && data->y < b) || distancia < 20)
 		{
 			l = paleta1->x + 10;
-			
+
 			if (data->x - 10 < l && data->x > l - 10)
 			{
 				data->dx *= -1;
@@ -176,18 +175,18 @@ void pelota_estado_normal (Pelota * data, Paleta * paleta1, Paleta * paleta2, \
 	{
 		a = paleta2->y - (paleta2->ima->h / 2) + 10;
 		b = paleta2->y + (paleta2->ima->h / 2) - 10;
-		
+
 		/* colision sobre los bordes planos de la paleta */
 		if (data->y < a)
 			distancia = dist ((data->y - a),(data->x - paleta2->x));
 
 		if (data->y > b)
 			distancia = dist ((data->y - b),(data->x - paleta2->x));
-		
+
 		if ((data->y > a && data->y < b) || distancia < 20 )
 		{
 			l = paleta2->x - 10;
-			
+
 			/* colision en las esquinas redondas de la paleta */
 			if (data->x + 10 > l && data->x < l + 10)
 			{

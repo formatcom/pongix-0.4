@@ -24,8 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <config.h>
-
+#include "config.h"
 
 enum estados_red {ERROR, ESPERA_TECLADO, ESPERA_CONEXION};
 

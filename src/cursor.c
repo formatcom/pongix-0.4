@@ -35,59 +35,72 @@ Cursor * cursor_iniciar (void)
 	data->ima = cargar_imagen ("pelota.bmp");
 
 	cursor_reiniciar (data);
-	
+
 	if (data->ima == NULL)
 		return NULL;
-	
+
 	return data;
 }
 
 void cursor_reiniciar (Cursor * data)
 {
 	data->x = 100;
+#ifdef __linux__
 	data->y = 115;
+#else
+	data->y = 215;
+#endif
 	data->y_final = data->y;
 	data->opcion = 0;
 }
 
-void cursor_actualizar (Cursor * data, Uint8 * teclas)
+// move -1 UP | 1 DOWN
+void cursor_actualizar (Cursor * data, int move)
 {
-	static SDLKey pulsada = 0;
 
+	int limit_opcion = 5;
+
+#ifdef __linux__
 	data->y_final = 115 + data->opcion * 50;
+#else
+	data->y_final = 215 + data->opcion * 50;
+#endif
 
-	if (teclas [SDLK_DOWN] && pulsada != SDLK_DOWN)
+#ifdef _EE
+	limit_opcion = 1;
+#endif
+
+#ifdef WIN32
+	limit_opcion = 3;
+#endif
+
+	if (move > 0 && data->block_move != move)
 	{
 		data->opcion ++;
-		pulsada = SDLK_DOWN;
 	}
 
-	if (teclas [SDLK_UP] && pulsada != SDLK_UP)
+	if (move < 0 && data->block_move != move)
 	{
 		data->opcion --;
-		pulsada = SDLK_UP;
 	}
+	data->block_move = move;
 
-	/* registra si se han soltado las teclas */
-	if (pulsada != 0 && teclas [pulsada] == 0)
-		pulsada = 0;
-	
 	if (data->opcion < 0)
-		data->opcion = 5;
-	
-	if (data->opcion > 5)
+		data->opcion = limit_opcion;
+
+	if (data->opcion > limit_opcion)
 		data->opcion = 0;
 
 	/* movimiento suave del cursor */
 	if (data->y != data->y_final)
-		data->y += (data->y_final - data->y) / 5;
+		data->y += (data->y_final - data->y) / limit_opcion;
 }
 
 void cursor_imprimir (Cursor * data, struct mundo * mundo)
 {
 	SDL_Rect rect = {data->x - data->ima->w / 2, \
 		data->y - data->ima->h / 2, 0, 0 };
-	
+
 	SDL_BlitSurface (data->ima, NULL, mundo->screen, &rect);
 	dirty_agregar (mundo->dirty, rect);
 }

@@ -30,7 +30,7 @@ typedef struct menu
 
 Menu * menu_iniciar (struct mundo * mundo);
 void menu_reiniciar (Menu * data);
-void menu_actualizar (Menu * data, Uint8 * teclas);
+void menu_actualizar (Menu * data, int move, int enter);
 void menu_imprimir (Menu * data);
 void menu_terminar (Menu * data);
 

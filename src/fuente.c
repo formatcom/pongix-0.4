@@ -33,7 +33,7 @@ Fuente * fuente_iniciar (const char * ruta, struct mundo * mundo)
 	Fuente * aux;
 
 	aux = (Fuente *) malloc (sizeof (Fuente));
-	
+
 	aux->ima = cargar_imagen (ruta);
 
 	if (aux->ima == NULL)
@@ -45,7 +45,7 @@ Fuente * fuente_iniciar (const char * ruta, struct mundo * mundo)
 	aux->letras = 0;
 
 	fuente_cargar_identificar_recs (aux);
-	
+
 	aux->mundo = mundo;
 	return aux;
 }
@@ -59,7 +59,7 @@ int fuente_es_pixel_opaco (SDL_Surface * ima, int fila, int col)
 {
 	int bpp = ima->format->BytesPerPixel;
 	Uint8 * p = ima->pixels + col * bpp + fila * ima->pitch;
-	Uint32 color;
+	Uint32 color = 0;
 	Uint8 r, g, b;
 
 	switch (bpp)
@@ -92,7 +92,7 @@ int fuente_es_pixel_opaco (SDL_Surface * ima, int fila, int col)
 
 	if (r == KEY_R && g == KEY_G && b == KEY_B)
 		return 0;
-	
+
 	return 1;
 }
 
@@ -116,7 +116,7 @@ void fuente_cargar_identificar_recs (Fuente * data)
 	int i;
 	int hay_letra = 0;
 	int indice = 0;
-	int i_ant;
+	int i_ant = 0;
 
 	for (i = 0; i < data->ima->w; i++)
 	{

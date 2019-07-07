@@ -37,7 +37,7 @@ typedef struct juego
 
 Juego * juego_iniciar (struct mundo * mundo);
 void juego_reiniciar (Juego * data, enum tipo_juego tipo);
-void juego_actualizar (Juego * data, Uint8 * teclas);
+void juego_actualizar (Juego * data, int key_escape);
 void juego_imprimir (Juego * data);
 void juego_terminar (Juego * data);
 

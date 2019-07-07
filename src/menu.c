@@ -19,7 +19,6 @@
 #include "menu.h"
 #include "mundo.h"
 
-
 Menu * menu_iniciar (struct mundo * mundo)
 {
 	Menu * data;
@@ -36,19 +35,25 @@ Menu * menu_iniciar (struct mundo * mundo)
 
 	if (data->cursor == NULL)
 		return NULL;
-	
+
 	data->mundo = mundo;
 
 	return data;
 }
 
-void menu_actualizar (Menu * data, Uint8 * teclas)
+void menu_actualizar (Menu * data, int move, int enter)
 {
-	cursor_actualizar (data->cursor, teclas);
+	cursor_actualizar (data->cursor, move);
 
-	if (teclas [SDLK_RETURN])
+	if (enter)
 	{
+#ifndef __linux__
+		int opcion;
+		if (data->cursor->opcion > 0) opcion = data->cursor->opcion + 2;
+		switch (opcion)
+#else
 		switch (data->cursor->opcion)
+#endif
 		{
 			case 0:
 				mundo_cambiar_estado (data->mundo, JUEGO);
@@ -61,15 +66,15 @@ void menu_actualizar (Menu * data, Uint8 * teclas)
 			case 2:
 				mundo_cambiar_estado (data->mundo, CLIENTE);
 				break;
-				
+
 			case 3:
 				mundo_cambiar_estado (data->mundo, CREDITOS);
 				break;
-				
+
 			case 4:
 				mundo_pantalla_completa (data->mundo);
 				break;
-				
+
 			case 5:
 				mundo_salir (data->mundo);
 				break;
@@ -84,12 +89,26 @@ void menu_actualizar (Menu * data, Uint8 * teclas)
 
 void menu_imprimir (Menu * data)
 {
-	fuente_printf (data->mundo->fuente, 150, 100, "Iniciar partida local");
-	fuente_printf (data->mundo->fuente, 150, 150, "Iniciar servidor (red)");
-	fuente_printf (data->mundo->fuente, 150, 200, "Iniciar cliente (red)");
-	fuente_printf (data->mundo->fuente, 150, 250, "Creditos");
-	fuente_printf (data->mundo->fuente, 150, 300, "Pantalla Completa");
-	fuente_printf (data->mundo->fuente, 150, 350, "Salir");
+#ifdef __linux__
+	int y = 100;
+#else
+	int y = 200;
+#endif
+	fuente_printf (data->mundo->fuente, 150, y, "Iniciar partida local");
+	y+=50;
+#ifdef __linux__
+	fuente_printf (data->mundo->fuente, 150, y, "Iniciar servidor (red)");
+	y+=50;
+	fuente_printf (data->mundo->fuente, 150, y, "Iniciar cliente (red)");
+	y+=50;
+#endif
+	fuente_printf (data->mundo->fuente, 150, y, "Creditos");
+	y+=50;
+#ifndef _EE
+	fuente_printf (data->mundo->fuente, 150, y, "Pantalla Completa");
+	y+=50;
+	fuente_printf (data->mundo->fuente, 150, y, "Salir");
+#endif
 
 	cursor_imprimir (data->cursor, data->mundo);
 }

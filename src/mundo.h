@@ -24,8 +24,10 @@
 #include "fuente.h"
 #include "creditos.h"
 
+#ifdef __linux__
 #include "cliente.h"
 #include "servidor.h"
+#endif
 
 enum estados {MENU, JUEGO, CREDITOS, SERVIDOR, CLIENTE, JUEGORED_CLIENTE, \
 	JUEGORED_SERVIDOR};
@@ -43,9 +45,11 @@ typedef struct mundo
 	struct fuente * fuente;
 	struct menu * menu;
 	struct juego * juego;
-	
+
+#ifdef __linux__
 	Cliente * cliente;
 	Servidor * servidor;
+#endif
 	Creditos * creditos;
 
 } Mundo;

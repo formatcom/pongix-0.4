@@ -17,6 +17,7 @@
  */
 
 #include "mundo.h"
+#include "control.h"
 #include "juego.h"
 #include "menu.h"
 
@@ -36,9 +37,9 @@ Mundo * mundo_iniciar (void)
 
 	if (data->screen == NULL)
 		return NULL;
-	
+
 	data->fondo = cargar_imagen ("fondo_juego.jpg");
-	
+
 	if (data->fondo == NULL)
 		return NULL;
 
@@ -46,9 +47,9 @@ Mundo * mundo_iniciar (void)
 		return NULL;
 
 	SDL_BlitSurface (data->fondo, NULL, data->screen, NULL);
-	dirty_agregar_pantalla_completa (data->dirty);	
+	dirty_agregar_pantalla_completa (data->dirty);
 	mundo_cambiar_estado(data, MENU);
-	
+
 	data->salir = 0;
 
 	return data;
@@ -56,6 +57,9 @@ Mundo * mundo_iniciar (void)
 
 int mundo_cargar_modulos (Mundo * data)
 {
+
+	control_iniciar();
+
 	if ((data->creditos = creditos_iniciar (data)) == NULL)
 		return 1;
 
@@ -71,37 +75,69 @@ int mundo_cargar_modulos (Mundo * data)
 	if ((data->fuente = fuente_iniciar ("fuente.bmp", data)) == NULL)
 		return 1;
 
+#ifdef __linux__
 	if ((data->cliente = cliente_iniciar (data)) == NULL)
 		return 1;
-	
+
 	if ((data->servidor = servidor_iniciar (data)) == NULL)
 		return 1;
+#endif
 
 	return 0;
 }
 
 void mundo_actualizar (Mundo * data)
 {
-	static Uint8 * teclas;
 
+#ifdef __linux__
+	static Uint8 * teclas;
 	teclas = SDL_GetKeyState (NULL);
+#endif
+
+	int move = 0;
+
+	if (control_boton_pulsado(CONTROL_BUTTON_JOY0_UP)) {
+		data->juego->paleta1->move = -1;
+		move = data->juego->paleta1->move;
+	}
+	if (control_boton_pulsado(CONTROL_BUTTON_JOY0_DOWN)) {
+		data->juego->paleta1->move = 1;
+		move = data->juego->paleta1->move;
+	}
+	if (control_boton_pulsado(CONTROL_BUTTON_JOY1_UP)) {
+		data->juego->paleta2->move = -1;
+	}
+	if (control_boton_pulsado(CONTROL_BUTTON_JOY1_DOWN)) {
+		data->juego->paleta2->move = 1;
+	}
 
 	switch (data->estado)
 	{
 		case MENU:
-			menu_actualizar (data->menu, teclas);
+			menu_actualizar (data->menu,
+								move,
+								control_boton_pulsado(CONTROL_BUTTON_JOY0_ENTER));
 			break;
 
 		case JUEGO:
 		case JUEGORED_CLIENTE:
 		case JUEGORED_SERVIDOR:
-			juego_actualizar (data->juego, teclas);
-			break;
-			
-		case CREDITOS:
-			creditos_actualizar (data->creditos, teclas);
+#ifdef _EE
+			// desde el ps2 no se puede salir del juego ya que el boton es LEFT y
+			// se podria presionar muy facilmente por error.
+			juego_actualizar (data->juego, 0);
+#else
+			juego_actualizar (data->juego,
+					control_boton_pulsado(CONTROL_BUTTON_JOY0_ESCAPE));
+#endif
 			break;
 
+		case CREDITOS:
+			creditos_actualizar (data->creditos,
+					control_boton_pulsado(CONTROL_BUTTON_JOY0_ESCAPE));
+			break;
+
+#ifdef __linux__
 		case SERVIDOR:
 			servidor_actualizar (data->servidor, teclas);
 			break;
@@ -109,7 +145,7 @@ void mundo_actualizar (Mundo * data)
 		case CLIENTE:
 			cliente_actualizar (data->cliente, teclas);
 			break;
-			
+#endif
 		default:
 			printf ("en Mundo: el estado '%d' es incorrecto\n", \
 					data->estado);
@@ -135,6 +171,7 @@ void mundo_imprimir (Mundo * data)
 			creditos_imprimir (data->creditos);
 			break;
 
+#ifdef __linux__
 		case SERVIDOR:
 			servidor_imprimir (data->servidor);
 			break;
@@ -142,8 +179,8 @@ void mundo_imprimir (Mundo * data)
 		case CLIENTE:
 			cliente_imprimir (data->cliente);
 			break;
+#endif
 
-			
 		default:
 			printf ("en Mundo: el estado '%d' es incorrecto\n", \
 					data->estado);
@@ -166,11 +203,11 @@ void mundo_cambiar_estado (Mundo * data, enum estados nuevo_estado)
 		case JUEGORED_SERVIDOR:
 			juego_reiniciar (data->juego, JUEGO_SERVIDOR);
 			break;
-			
+
 		case JUEGORED_CLIENTE:
 			juego_reiniciar (data->juego, JUEGO_CLIENTE);
 			break;
-			
+
 		case JUEGO:
 			juego_reiniciar (data->juego, NORED);
 			break;
@@ -178,6 +215,7 @@ void mundo_cambiar_estado (Mundo * data, enum estados nuevo_estado)
 		case CREDITOS:
 			break;
 
+#ifdef __linux__
 		case SERVIDOR:
 			servidor_reiniciar (data->servidor);
 			break;
@@ -185,7 +223,8 @@ void mundo_cambiar_estado (Mundo * data, enum estados nuevo_estado)
 		case CLIENTE:
 			cliente_reiniciar (data->cliente);
 			break;
-			
+#endif
+
 		default:
 			printf ("Escena inexistente, no se puede reiniciar\n");
 			break;
@@ -194,7 +233,7 @@ void mundo_cambiar_estado (Mundo * data, enum estados nuevo_estado)
 
 void mundo_pantalla_completa (Mundo * data)
 {
-	
+
 #ifndef WIN32
 	SDL_WM_ToggleFullScreen (data->screen);
 #else
@@ -212,12 +251,12 @@ void mundo_pantalla_completa (Mundo * data)
 	{
 		SDL_FreeSurface (data->screen);
 		data->screen = nueva;
-	
-		dirty_agregar_pantalla_completa (data->dirty);	
+
+		dirty_agregar_pantalla_completa (data->dirty);
 	}
 	else
 		printf ("No se puede cambiar el modo de video\n");
-		
+
 #endif
 
 }
@@ -228,14 +267,24 @@ void mundo_terminar (Mundo * data)
 	juego_terminar (data->juego);
 	dirty_terminar (data->dirty);
 	fuente_terminar (data->fuente);
+#ifdef __linux__
 	servidor_terminar (data->servidor);
 	cliente_terminar (data->cliente);
+#endif
 	SDL_FreeSurface (data->fondo);
 
 	free (data);
+
+	control_terminar();
+#ifdef __linux__
 	SDLNet_Quit ();
+#endif
+
+#ifdef _EE
+	SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
+#endif
 	SDL_Quit ();
-	
+
 	printf ("¡ Gracias por jugar a %s !\n", PACKAGE_STRING);
 }
 

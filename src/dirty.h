@@ -21,7 +21,7 @@
 
 #include "util.h"
 
-typedef struct 
+typedef struct
 {
 	struct mundo * mundo;
 	SDL_Rect actuales [200];

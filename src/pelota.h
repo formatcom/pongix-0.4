@@ -28,7 +28,7 @@
 
 enum estado {INICIANDO, NORMAL};
 
-typedef struct 
+typedef struct
 {
 	float x;
 	float y;
@@ -51,5 +51,6 @@ void pelota_actualizar (Pelota * data, Paleta * paleta1, Paleta * paleta2, \
 void pelota_estado_normal (Pelota * data, Paleta * paleta1, Paleta * paleta2, \
 		Marcador * marcador);
 void pelota_estado_iniciando (Pelota * data);
+void pelota_imprimir ( Pelota * data, struct mundo * mundo);
 
 #endif

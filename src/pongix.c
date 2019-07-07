@@ -20,14 +20,22 @@
 #include "util.h"
 #include "dirty.h"
 
+#ifdef _EE
+#include <sifrpc.h>
+#endif
+
+
 int main (int argc, char * argv [])
 {
 	Mundo * mundo;
-	int repeticiones;
+	int repeticiones = 0;
 	int i;
-	
-	mundo = mundo_iniciar ();
 
+#ifdef _EE
+	SifInitRpc(0);
+#endif
+
+	mundo = mundo_iniciar ();
 	if (mundo == NULL)
 		return 1;
 
@@ -37,10 +45,11 @@ int main (int argc, char * argv [])
 
 		for (i = 0; i < repeticiones; i ++)
 			mundo_actualizar (mundo);
-	
+
 		mundo_imprimir (mundo);
 	}
-	
+
 	mundo_terminar (mundo);
+
 	return 0;
 }

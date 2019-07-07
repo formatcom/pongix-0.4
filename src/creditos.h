@@ -28,7 +28,7 @@ typedef struct
 
 
 Creditos * creditos_iniciar (struct mundo * mundo);
-void creditos_actualizar (Creditos * data, Uint8 * teclas);
+void creditos_actualizar (Creditos * data, int key_escape);
 void creditos_imprimir (Creditos * data);
 void creditos_terminar (Creditos * data);
 

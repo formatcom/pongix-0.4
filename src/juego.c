@@ -37,12 +37,12 @@ Juego * juego_iniciar (struct mundo * mundo)
 
 	if (data->pelota == NULL)
 		return NULL;
-	
+
 	data->paleta1 = paleta_iniciar (1, data);
 
 	if (data->paleta1 == NULL)
 		return NULL;
-	
+
 	data->paleta2 = paleta_iniciar (2, data);
 
 	if (data->paleta2 == NULL)
@@ -52,9 +52,9 @@ Juego * juego_iniciar (struct mundo * mundo)
 
 	if (data->marcador == NULL)
 		return NULL;
-	
+
 	juego_reiniciar (data, NORED);
-	
+
 	return data;
 }
 
@@ -68,10 +68,12 @@ void juego_reiniciar (Juego * data, enum tipo_juego tipo)
 	marcador_reiniciar (data->marcador);
 }
 
-void juego_actualizar (Juego * data, Uint8 * teclas)
+void juego_actualizar (Juego * data, int key_escape)
 {
-	if (teclas [SDLK_ESCAPE])
+
+	if (key_escape)
 	{
+#ifdef __linux__
 		switch (data->tipo)
 		{
 			case JUEGO_CLIENTE:
@@ -85,18 +87,20 @@ void juego_actualizar (Juego * data, Uint8 * teclas)
 			default:
 				break;
 		}
-		
+#endif
+
 		mundo_cambiar_estado (data->mundo, MENU);
-		return ; 
+		return ;
 	}
-	
+
+#ifdef __linux__
 	switch (data->tipo)
 	{
 		case JUEGO_CLIENTE:
 			paleta_recibir_pos (data->paleta1, \
 					data->mundo->cliente->socket);
-			
-			paleta_actualizar (data->paleta2, teclas);
+
+			paleta_actualizar (data->paleta2);
 			paleta_enviar_pos (data->paleta2, \
 					data->mundo->cliente->socket);
 
@@ -105,7 +109,7 @@ void juego_actualizar (Juego * data, Uint8 * teclas)
 			break;
 
 		case JUEGO_SERVIDOR:
-			paleta_actualizar (data->paleta1, teclas);
+			paleta_actualizar (data->paleta1);
 			paleta_enviar_pos (data->paleta1, \
 					data->mundo->servidor->cliente);
 
@@ -115,15 +119,21 @@ void juego_actualizar (Juego * data, Uint8 * teclas)
 			pelota_actualizar (data->pelota, data->paleta1, \
 					data->paleta2, data->marcador);
 			break;
-
 		case NORED:
-			paleta_actualizar (data->paleta1, teclas);
-			paleta_actualizar (data->paleta2, teclas);
+			paleta_actualizar (data->paleta1);
+			paleta_actualizar (data->paleta2);
 
 			pelota_actualizar (data->pelota, data->paleta1, \
 					data->paleta2, data->marcador);
 			break;
 	}
+#else
+			paleta_actualizar (data->paleta1);
+			paleta_actualizar (data->paleta2);
+
+			pelota_actualizar (data->pelota, data->paleta1, \
+					data->paleta2, data->marcador);
+#endif
 }
 
 void juego_imprimir (Juego * data)

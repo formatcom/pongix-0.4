@@ -36,7 +36,7 @@ Cliente * cliente_iniciar (struct mundo * mundo)
 
 	strcpy (data->ip, "_");
 	data->nip = 0;
-	
+
 	return data;
 }
 

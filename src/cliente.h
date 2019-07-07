@@ -30,7 +30,7 @@ typedef struct
 	char mensaje [512];
 	enum estados_red estado;
 	char ip [17];
-	int nip; 
+	int nip;
 } Cliente;
 
 

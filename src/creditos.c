@@ -32,14 +32,14 @@ Creditos * creditos_iniciar (struct mundo * mundo)
 	}
 
 	data->mundo = mundo;
-	
+
 	return data;
 }
 
 
-void creditos_actualizar (Creditos * data, Uint8 * teclas)
+void creditos_actualizar (Creditos * data, int key_escape)
 {
-	if (teclas [SDLK_ESCAPE])
+	if (key_escape)
 		mundo_cambiar_estado (data->mundo, MENU);
 }
 
@@ -49,6 +49,7 @@ void creditos_imprimir (Creditos * data)
 			" * Hugo Ruscitti\n"
 			" * Lucas Liendo\n"\
 			" * Ricardo Javier Tellechea Suárez\n"\
+			" * Vinicio Valbuena ps2 port\n"\
 			"\n"\
 			" Este programa se distribuye bajo la \n"\
 			" licencia GPL; visite nuestro sitio web: \n"\

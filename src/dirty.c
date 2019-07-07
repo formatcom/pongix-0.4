@@ -38,7 +38,7 @@ Dirty * dirty_iniciar (void)
 void dirty_agregar_sin_duplicados (SDL_Rect * dst, int * ndst, SDL_Rect * src)
 {
 	int i;
-	
+
 	/* busca un duplicado */
 	for (i = 0; i < * ndst; i ++)
 	{
@@ -66,7 +66,7 @@ void dirty_agregar_pantalla_completa (Dirty * data)
 	data->actuales [0].y = 0;
 	data->actuales [0].w = 640;
 	data->actuales [0].h = 480;
-	
+
 	data->limite_actuales = 1;
 }
 
@@ -89,7 +89,7 @@ void dirty_restaurar (SDL_Surface * dst, SDL_Surface * src, SDL_Rect * rect, \
 		int n)
 {
 	int i;
-	
+
 	for (i = 0; i < n; i ++)
 		SDL_BlitSurface (src, rect + i, dst, rect + i);
 
@@ -101,8 +101,9 @@ void dirty_actualizar (Dirty * data, SDL_Surface * screen, SDL_Surface * fondo)
 	static int n = 0;
 
 	dirty_copiar (todos, data->actuales, &n, data->limite_actuales);
-	
+
 	SDL_UpdateRects (screen, n, todos);
+	SDL_Flip(screen);
 
 	/* prepara el próximo cuadro */
 	n = 0;

@@ -1,6 +1,119 @@
-Pongix - free pong-like game
+PS2 PORT Pongix 0.4
 ----------------------------
+Autor: Vinicio Valbuena
 
+Proyecto
+----------------------------
+Pongix 0.5 Multiplataforma
+
+	- Linux
+	- Windows
+	- PS2
+
+Motivación
+----------------------------
+Por casualidad buscando informacion de ps2sdk en espa;ol para mis hermanos,
+me encontre con un proyecto de fin de carrera (PFC) el cual me llamo mucho
+la atencion su tematica, era sobre hacer un port del Pongix 0.3 al PS2
+utilizando el ps2sdk y el port de la libreria SDL, como es un tema que siempre
+me ha gustado me propuse a leer el trabajo y por varias dificultades que en su
+dia no lograron superar, el proyecto cerro sin un juego funcional.
+
+Como se del tema y es algo que me divierte queria usar este proyecto para darle
+una solucion practica, para los propios autores del PFC como tambien a los que
+les llame la atencion como se realiza un PORT y van iniciando en este mundo
+que es el caso de mis hermanos, asi que vamos a ello.
+
+
+Reglas que me pondre para hacerlo mas divertido
+----------------------------
+1.- Respetar el codigo original.
+2.- Si es posible solo cambiar en el codigo el manejo de los controles para que
+soporte PS2.
+3.- Utilizar solo el port de sdl del ps2sdk.
+4.- Que funcione tanto en una PS2 fisica, como en PCSX2.
+
+
+Requisitos para funcionar correctamente en PS2
+----------------------------
+1.- SDL https://github.com/ps2dev/ps2sdk-ports/tree/master/sdl
+2.- Compilar SDL sin soporte a MULTITAP
+					ENABLE_MTAP=0
+
+
+Problemas encontrado en el camino
+----------------------------
+1.- El codigo requeria ser limpiado para que compilara con exito para
+la ps2. Eran solo cambio menores, mas que nada inicializar variables.
+
+2.- No se muestran nada en pantalla.
+Solucion: El problema viene dado ya que SDL por defecto en el PS2
+viene con el doble buffer, asi que es necesario realizar un
+SDL_Flip(screen) para actualizar la pantalla.
+
+Nota: En este punto preferi hacer que en todos los sistemas funcionara
+con doble buffer para tener el mismo comportamientos en todas las
+plataformas soportadas.
+
+3.- Solo se dibuja el fondo del juego.
+Solucion: El problema viene exactamente del propio Pongix que utiliza
+SDL_Delay y SDL_GetTicks, ambas funcionen no funcionan de forma adecuada
+si al iniciar el SDL no se le indica que trabaja con el submodulo
+SDL_INIT_TIMER. Por lo cual el juego se quedaba congelado al hacer el
+primer SDL_Delay.
+
+4.- Utilizar joysticks con SDL
+El juego se congela al iniciarlizar el joystick.
+Solucion: Yo opte por la solucion mas sencilla y se que funciona perfectamente,
+desactivar el ENABLE_MTAP para SDL hace que utilice por debajo libpad y asi no
+romper la regla de solo utilizar el PORT de SDL.
+
+5.- No estoy orgulloso del sistema de control, pero tampoco queria invertir
+mas tiempo en adaptar todo el sistema de control de Pongix.
+
+	- PC JUGADOR 1
+		ARRIBA -> W
+		ABAJO  -> S
+		ENTER
+		ESCAPE
+
+	- PC JUGADOR 2
+		ARRIBA -> I
+		ABAJO  -> K
+
+	- PS2 JUGADOR 1
+		ARRIBA -> arriba xD..
+		ABAJO  -> abajo
+		ENTER  -> derecha
+		ESCAPE -> izquierda
+
+	- PS2 JUGADOR 2
+		ARRIBA -> arriba
+		ABAJO  -> abajo
+
+6.- En pongix el sistema de menu esta HARDCODE lo que no me permite sacar o ingresar item,
+para evitar crear mi propio sistema de menu y terminar con el proyecto he decidido simplemente
+utilizar ifdef por cada plataforma. ES HORRIBLE lo se, pero no quiero reimplementar el juego.
+
+7.- No me tome la molestia de probarlo en windows xD... asi que espero que funcione si no,
+me lo hacen saber y yo con gusto lo reparo.
+
+
+Proyecto Original.
+----------------------------
+Estudiar la portabilidad de videojuegos para PS2 tan solo utilizando
+de forma exclusiva el port que la PS2. tiene de las librerías SDL.
+
+DOCUMENTO DEL PFC: https://upcommons.upc.edu/bitstream/handle/2099.1/5763/memoria.pdf
+
+
+Pongix Sitio oficial
+---------------------------
+http://www.losersjuegos.com.ar/juegos/pongix
+
+
+Pongix 0.4 README Original
+----------------------------
 Introducción:
 
   Pongix es un videojuego muy simple para dos jugadores inspirado en el 
