@@ -49,7 +49,7 @@ void creditos_imprimir (Creditos * data)
 			" * Hugo Ruscitti\n"
 			" * Lucas Liendo\n"\
 			" * Ricardo Javier Tellechea Suárez\n"\
-			" * Vinicio Valbuena ps2 port\n"\
+			" * Vinicio Valbuena ps2 version\n"\
 			"\n"\
 			" Este programa se distribuye bajo la \n"\
 			" licencia GPL; visite nuestro sitio web: \n"\

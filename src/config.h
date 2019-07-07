@@ -1,7 +1,7 @@
 #ifndef _CONFIG_
 #define _CONFIG_
 
-#define PACKAGE_STRING "pongix 0.4"
+#define PACKAGE_STRING "pongix 0.5"
 #define DATADIR "data/"
 
 #define JOY0_ENTER  SDLK_RETURN

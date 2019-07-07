@@ -11,4 +11,4 @@ $(TARGET): $(OBJS)
 
 .PHONY: clean
 clean:
-	rm -f $(OBJS) $(TARGET) $(TARGET).exe $(TARGET).elf *.s *.o
+	rm -f $(OBJS) $(TARGET) *.exe *.elf *.ELF *.s *.o

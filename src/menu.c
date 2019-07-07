@@ -59,6 +59,7 @@ void menu_actualizar (Menu * data, int move, int enter)
 				mundo_cambiar_estado (data->mundo, JUEGO);
 				break;
 
+#ifdef __linux__
 			case 1:
 				mundo_cambiar_estado (data->mundo, SERVIDOR);
 				break;
@@ -66,6 +67,7 @@ void menu_actualizar (Menu * data, int move, int enter)
 			case 2:
 				mundo_cambiar_estado (data->mundo, CLIENTE);
 				break;
+#endif
 
 			case 3:
 				mundo_cambiar_estado (data->mundo, CREDITOS);

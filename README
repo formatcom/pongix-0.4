@@ -40,6 +40,25 @@ Requisitos para funcionar correctamente en PS2
 2.- Compilar SDL sin soporte a MULTITAP
 					ENABLE_MTAP=0
 
+Dependencias de compilacion
+----------------------------
+1.- SDL 1.2
+2.- SDL_image
+3.- SDL_net <- esta solo para linux
+
+
+Compilar para linux
+---------------------------
+$ make
+
+Compilar para windows
+---------------------------
+$ make -f Makefile.win
+
+Compilar para ps2
+--------------------------
+$ make -f Makefile.ps2
+
 
 Problemas encontrado en el camino
 ----------------------------

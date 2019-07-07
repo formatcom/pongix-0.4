@@ -4,5 +4,5 @@ build:
 	make -f Makefile.win -C src
 	mv src/pongix.exe .
 clean:
-	rm -f pongix pongix.elf pongix.exe
+	rm -f pongix *.elf *.ELF pongix.exe
 	make -C src clean

@@ -15,6 +15,10 @@ EE_LIBS = -lm -L$(PS2SDK)/ports/lib -lSDL_image -lsdl
 
 
 all: $(EE_BIN)
+	ee-strip $<
+	echo "Stripping..."
+	echo "Compressing..."
+	ps2-packer $< PONGIX.ELF
 
 fondo_juego_jpg.s:
 	bin2s ../data/fondo_juego.jpg $@ fondo_juego_jpg
@@ -32,7 +36,7 @@ pelota_bmp.s:
 	$(EE_AS) $(EE_ASFLAGS) $(EE_ASM_DIR)$< -o $@
 
 clean:
-	rm -f  $(EE_BIN) $(EE_OBJS) *.s
+	rm -f  *.elf *.ELF $(EE_OBJS) *.s
 
 include $(PS2SDK)/samples/Makefile.pref
 include $(PS2SDK)/samples/Makefile.eeglobal
