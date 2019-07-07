@@ -1,0 +1,26 @@
+Pongix - free pong-like game
+----------------------------
+
+Introducción:
+
+  Pongix es un videojuego muy simple para dos jugadores inspirado en el 
+  clásico Pong.
+  
+  Comenzamos a desarrollar el programa para participar de la propuesta 
+  "Pong" que realizaron varios usuarios de la lista de correo SDL en español
+  (http://www.elistas.net/lista/sdl). La propuesta consistía en desarrollar
+  varias versiones diferentes del videojuego Pong con las bibliotecas SDL, 
+  cada versión podía incluir sus propias variantes.
+ 
+Herramientas:
+
+  Utilizamos la biblioteca SDL, el lenguaje de programación C (ansi C), y 
+  el sistema operativo GNU/Linux (específicamente las distribuciones Debian y
+  Slackware). Además utilizamos muchos programas que no se suelen mencionar 
+  en estas ocasiones, VIM (editor de textos), Gimp! (editor de imágenes), 
+  gcc (colección de compiladores de GNU) y la lista continua ...
+
+  Luego de contar con una versión funcional optamos por añadir la biblioteca 
+  SDL_Net, para proveer soporte de redes al programa.
+
+

@@ -1,0 +1,10 @@
+CC = gcc
+CFLAGS = -DDATADIR=\""data/"\" -DPACKAGE=\""pongix\"" -DPACKAGE_VERSION=\""0.3\"" -DVERSION=\""0.3\"" -PACKAGE_STRING=\""pongix 0.3\""
+LDFLAGS = -lSDL_image -lSDL 
+OBJS = cursor.o dirty.o fuente.o juego.o menu.o mundo.o paleta.o pelota.o \
+pongix.o util.o
+
+pongix.exe = $(OBJS)
+
+clear:
+	$(RM) *.exe *.o
